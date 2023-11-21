@@ -9,7 +9,8 @@ import '../model/form.dart';
 class FormController {
   // Google App Script Web URL.
   static const String URL =
-      "https://script.google.com/macros/s/AKfycbyAaNh-1JK5pSrUnJ34Scp3889mTMuFI86DkDp42EkWiSOOycE/exec";
+      "https://script.google.com/macros/s/AKfycbws4Y-ab7YTSs67dyUwTbgyBxlLZnG7pO-X7pL8MByP0G3p0ywRJHlAscF9B69qW67t/exec";
+
 
   // Success Status Message
   static const STATUS_SUCCESS = "SUCCESS";
@@ -19,10 +20,17 @@ class FormController {
   void submitForm(
       FeedbackForm feedbackForm, void Function(String) callback) async {
     try {
-      await http.post(URL, body: feedbackForm.toJson()).then((response) async {
+      await http.post(Uri.parse(URL),
+          headers: <String, String>{
+            'Content-Type' : 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(
+              feedbackForm.toJson()
+          )
+      ).then((response) async {
         if (response.statusCode == 302) {
           var url = response.headers['location'];
-          await http.get(url).then((response) {
+          await http.get(Uri.parse(url!)).then((response) {
             callback(convert.jsonDecode(response.body)['status']);
           });
         } else {
@@ -36,7 +44,7 @@ class FormController {
 
   /// Async function which loads feedback from endpoint URL and returns List.
   Future<List<FeedbackForm>> getFeedbackList() async {
-    return await http.get(URL).then((response) {
+    return await http.get(Uri.parse(URL)).then((response) {
       var jsonFeedback = convert.jsonDecode(response.body) as List;
       return jsonFeedback.map((json) => FeedbackForm.fromJson(json)).toList();
     });
