@@ -11,7 +11,6 @@ class FormController {
   static const String URL =
       "https://script.google.com/macros/s/AKfycbws4Y-ab7YTSs67dyUwTbgyBxlLZnG7pO-X7pL8MByP0G3p0ywRJHlAscF9B69qW67t/exec";
 
-
   // Success Status Message
   static const STATUS_SUCCESS = "SUCCESS";
 
