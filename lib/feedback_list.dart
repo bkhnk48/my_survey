@@ -16,7 +16,7 @@ class FeedbackListScreen extends StatelessWidget {
 }
 
 class FeedbackListPage extends StatefulWidget {
-  FeedbackListPage({Key key, this.title}) : super(key: key);
+  FeedbackListPage({required this.title}) ;//: super(key: key);
 
   final String title;
 
@@ -25,7 +25,7 @@ class FeedbackListPage extends StatefulWidget {
 }
 
 class _FeedbackListPageState extends State<FeedbackListPage> {
-  List<FeedbackForm> feedbackItems = List<FeedbackForm>();
+  List<FeedbackForm> feedbackItems = [];
 
   // Method to Submit Feedback and save it in Google Sheets
 
