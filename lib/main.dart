@@ -10,7 +10,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Google Sheet Demo',
+      title: 'Survey for your class',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({required this.title});// : super(key: key);
 
   final String title;
 
@@ -35,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // Note: This is a `GlobalKey<FormState>`,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  //final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   // TextField Controllers
   TextEditingController nameController = TextEditingController();
@@ -47,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _submitForm() {
     // Validate returns true if the form is valid, or false
     // otherwise.
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       // If the form is valid, proceed.
       FeedbackForm feedbackForm = FeedbackForm(
           nameController.text,
@@ -76,14 +78,16 @@ class _MyHomePageState extends State<MyHomePage> {
   // Method to show snackbar with 'message'.
   _showSnackbar(String message) {
     final snackBar = SnackBar(content: Text(message));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    //_scaffoldKey.currentState?.showSnackBar(snackBar);
+    _scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
+      key: _scaffoldMessengerKey,
+      //_scaffoldKey,
+      //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -101,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextFormField(
                         controller: nameController,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Enter Valid Name';
                           }
                           return null;
@@ -111,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextFormField(
                         controller: emailController,
                         validator: (value) {
-                          if (!value.contains("@")) {
+                          if (!value!.contains("@")) {
                             return 'Enter Valid Email';
                           }
                           return null;
@@ -122,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextFormField(
                         controller: mobileNoController,
                         validator: (value) {
-                          if (value.trim().length != 10) {
+                          if (value!.trim().length != 10) {
                             return 'Enter 10 Digit Mobile Number';
                           }
                           return null;
@@ -135,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextFormField(
                         controller: feedbackController,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Enter Valid Feedback';
                           }
                           return null;
@@ -146,15 +150,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 )),
-            RaisedButton(
-              color: Colors.blue,
-              textColor: Colors.white,
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue, // This is the color of the button
+                onPrimary: Colors.white, // This is the color of the text
+              ),
               onPressed: _submitForm,
               child: Text('Submit Feedback'),
             ),
-            RaisedButton(
-              color: Colors.lightBlueAccent,
-              textColor: Colors.black,
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.lightBlueAccent, // This is the color of the button
+                onPrimary: Colors.black, // This is the color of the text
+              ),
               onPressed: () {
                 Navigator.push(
                     context,
@@ -164,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text('View Feedback'),
             ),
+
           ],
         ),
       ),
